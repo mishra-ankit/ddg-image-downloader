@@ -1,25 +1,8 @@
 import fetch, {Response} from 'node-fetch'
-
-const fs = require('fs')
+import downloadImage from './download-image'
+import {Options, ImageResponse} from './types'
 
 const ROOT_URL = 'https://duckduckgo.com'
-
-async function download(url: string, path: string) {
-  // TODO: Can be other formats as well.
-  const pathWithExtension = `${path}.jpg`
-  const response = await fetch(url)
-  // TODO: and also content type ? If non image ?
-  // const {ext, mime} = await FileType.fromStream(response.data);
-  // console.log(ext);
-
-  if (response.status !== 200) {
-    throw new Error(`Failed image : ${pathWithExtension}. Status ${response.status} returned - ${url}`)
-  }
-  const buffer = await response.buffer()
-  fs.writeFile(pathWithExtension, buffer, () => {
-    // console.log('finished downloading!', path))
-  })
-}
 
 async function getToken(query: string) {
   try {
@@ -32,23 +15,6 @@ async function getToken(query: string) {
   } catch (error) {
     throw new Error('Failed to get token!' + error)
   }
-}
-
-interface Options {
-  query: string;
-  limit: number;
-  filter?: (image: Image) => boolean;
-  fParams?: string;
-  outputPath?: string;
-}
-
-interface Image {
-  image: string;
-}
-
-interface ImageResponse {
-  results: Image[];
-  next: string;
 }
 
 async function downloadImages({
@@ -84,10 +50,10 @@ async function downloadImages({
 
     const filteredImage = response.results.filter(filter).slice(0, effectiveLimit)
 
-    // Method 1 : Doesn't uses parallel download capabilities, but ensures all files present.
+    // Method 1 : Doesn't uses parallel downloadImage capabilities, but ensures all files present.
     // for (let i = 0; i < filteredImage.length; i++) {
     //   try {
-    //     await download(filteredImage[i].image, `${outputPath + query}_${count++}`)
+    //     await downloadImage(filteredImage[i].image, `${outputPath + query}_${count++}`)
     //   } catch (error) {
     //     count--
     //     console.error('FFFF', count)
@@ -99,8 +65,10 @@ async function downloadImages({
     await Promise.all(
       filteredImage.map(async (item: any) => {
         try {
-          await download(item.image, `${outputPath + query}_${count++}`)
+          await downloadImage(item.image, `${outputPath + query}_${count++}`)
+          // console.log("Success", count)
         } catch (error) {
+          // console.error("FAILED", error)
           failed.push(error)
         } finally {
           // eslint-disable-next-line no-unsafe-finally
@@ -109,8 +77,8 @@ async function downloadImages({
       }),
     )
   }
-  console.error(failed.toString())
-  console.log('Download Done!')
+  // console.error(failed.toString())
+  console.log('Download finished!')
 }
 
 export {downloadImages}
