@@ -1,52 +1,24 @@
-import axios from 'axios'
 import fetch, {Response} from 'node-fetch'
 
 const fs = require('fs')
 
 const ROOT_URL = 'https://duckduckgo.com'
 
-async function downloadImage(url: string, path: string) {
+async function download(url: string, path: string) {
   // TODO: Can be other formats as well.
   const pathWithExtension = `${path}.jpg`
+  const response = await fetch(url)
+  // TODO: and also content type ? If non image ?
   // const {ext, mime} = await FileType.fromStream(response.data);
   // console.log(ext);
 
-  const writer = fs.createWriteStream(pathWithExtension)
-
-  const promise = new Promise(async (resolve, reject) => {
-    let error: Error | null = null
-    writer.on('error', (err: Error) => {
-      error = err
-      writer.close()
-      reject(err)
-    })
-    writer.on('close', () => {
-      if (!error) {
-        console.log('Saved -', path)
-        resolve(true)
-      }
-    })
-
-    let response
-    try {
-      response = await axios({
-        url,
-        method: 'GET',
-        responseType: 'stream',
-      })
-      response.data.pipe(writer)
-    } catch (error2) {
-      writer.close()
-      if (fs.existsSync(pathWithExtension)) {
-        fs.unlinkSync(pathWithExtension)
-      }
-      reject(error2)
-      // eslint-disable-next-line no-console
-      console.error('Failed -', error2.message, path, url)
-    }
+  if (response.status !== 200) {
+    throw new Error(`Failed image : ${pathWithExtension}. Status ${response.status} returned - ${url}`)
+  }
+  const buffer = await response.buffer()
+  fs.writeFile(pathWithExtension, buffer, () => {
+    // console.log('finished downloading!', path))
   })
-
-  return promise
 }
 
 async function getToken(query: string) {
@@ -95,36 +67,50 @@ async function downloadImages({
   let response: ImageResponse | undefined
 
   let count = 0
+  let page = 1
+  const failed: string[] = []
   while (count < limit) {
     // console.log("Next:", response.next);
     let nextUrl: string = url
     if (response?.next) {
-      console.log('Next:', response.next)
+      console.log('Going to page', ++page)
       nextUrl = `${ROOT_URL}/${response.next}${tokenSuffix}`
     }
-    response = (await axios(nextUrl)).data as ImageResponse
+    response = (await fetch(nextUrl).then(t => t.json())) as ImageResponse
 
-    console.log('Total count:', response.results.length)
+    // console.log('Total count:', response.results.length)
 
     const effectiveLimit = limit - count
 
     const filteredImage = response.results.filter(filter).slice(0, effectiveLimit)
+
+    // Method 1 : Doesn't uses parallel download capabilities, but ensures all files present.
+    // for (let i = 0; i < filteredImage.length; i++) {
+    //   try {
+    //     await download(filteredImage[i].image, `${outputPath + query}_${count++}`)
+    //   } catch (error) {
+    //     count--
+    //     console.error('FFFF', count)
+    //   }
+    // }
+    // count += filteredImage.length
+
+    // Method 2 : Could leave holes, when URl returns non success. But fast.
     await Promise.all(
       filteredImage.map(async (item: any) => {
-        let t
         try {
-          t = await downloadImage(item.image, `${outputPath + query}_${count++}`)
-          //count++
+          await download(item.image, `${outputPath + query}_${count++}`)
         } catch (error) {
-          console.error('FFFF', count)
-          t = Promise.resolve()
+          failed.push(error)
+        } finally {
+          // eslint-disable-next-line no-unsafe-finally
+          return Promise.resolve()
         }
-
-        return t
       }),
     )
-    // count += filteredImage.length
   }
+  console.error(failed.toString())
+  console.log('Download Done!')
 }
 
 export {downloadImages}
