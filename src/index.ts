@@ -22,7 +22,7 @@ class DdgBulkImageDownloader extends Command {
   // each can be multiline
   static examples = [
     '$ ddg-download "Morgan Freeman"',
-    '$ dg-download -q "Morgan Freeman" -l 60 -o myOutput',
+    '$ ddg-download -q "Morgan Freeman" -l 60 -o myOutput',
   ]
 
   async run() {
@@ -34,16 +34,17 @@ class DdgBulkImageDownloader extends Command {
       this.error('No search term provided.')
       return
     }
-    this.log(`Searching for - ${userQuery}`)
+    // show on stdout instead of stderr
+
     await downloadImages({
       limit,
       query: userQuery,
       outputPath: output,
+      debug: Boolean(this.config.debug),
     })
     // console.log(this.config)
-    this.log(`Download finished! ${limit} images saved ${output ? `to folder '${output}'` : ''}`)
+    this.log(`Done! ${limit} images saved ${output ? `to folder '${output}'` : ''}`)
   }
-
 }
 
 export = DdgBulkImageDownloader

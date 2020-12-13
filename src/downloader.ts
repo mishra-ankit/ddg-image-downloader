@@ -3,6 +3,7 @@ import downloadImage from './download-image'
 import {ImageResponse, Options} from './types'
 import * as path from 'path'
 import {ensureDirSync} from 'fs-extra'
+import cli from 'cli-ux'
 
 const ROOT_URL = 'https://duckduckgo.com'
 
@@ -25,7 +26,10 @@ async function downloadImages({
   filter = () => true,
   fParams = 'size:small',
   outputPath = '',
+  debug,
 }: Options) {
+  cli.action.start('Initializing download', '', {stdout: true})
+
   const token = await getToken(query)
   const tokenSuffix = `&vqd=${token}`
   const url = `${ROOT_URL}/i.js?o=json&f=${fParams},type:photo&q=${encodeURIComponent(
@@ -44,14 +48,19 @@ async function downloadImages({
     // console.log("Next:", response.next);
     let nextUrl: string = url
     if (response?.next) {
-      console.log('Going to page', ++page)
+      ++page
+      if (debug) {
+        console.log('Going to page', page)
+      }
       nextUrl = `${ROOT_URL}/${response.next}${tokenSuffix}`
     }
     response = (await fetch(nextUrl).then(t => t.json())) as ImageResponse
 
     const effectiveLimit = limit - (count - failed.length)
+    const filteredImage = response.results.filter(filter)
+    const toBeDownloadedImages = filteredImage.slice(0, Math.min(effectiveLimit, filteredImage.length))
 
-    const filteredImage = response.results.filter(filter).slice(0, effectiveLimit)
+    cli.action.start(`Downloading ${toBeDownloadedImages.length} from`, 'page :' + page.toString(), {stdout: true})
 
     // Method 1 : Doesn't uses parallel downloadImage capabilities, but ensures all files present.
     // for (let i = 0; i < filteredImage.length; i++) {
@@ -66,14 +75,16 @@ async function downloadImages({
 
     // Method 2 : Could leave holes, when URl returns non success. But fast.
     await Promise.all(
-      filteredImage.map(async (item: any) => {
+      toBeDownloadedImages.map(async (item: any) => {
         try {
           const savePath = path.join(outputPath, `${query}_${count++}`)
           // console.log(savePath)
           await downloadImage(item.image, savePath)
           // console.log("Success", count)
         } catch (error) {
-          console.error(error.message)
+          if (debug) {
+            console.error(error.message)
+          }
           failed.push(error)
         } finally {
           // eslint-disable-next-line no-unsafe-finally
@@ -82,6 +93,8 @@ async function downloadImages({
       }),
     )
   }
+
+  cli.action.stop('done')
 }
 
 export {downloadImages}

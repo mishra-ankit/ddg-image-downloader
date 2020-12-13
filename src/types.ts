@@ -4,6 +4,7 @@ export interface Options {
   filter?: (image: Image) => boolean;
   fParams?: string;
   outputPath?: string;
+  debug: boolean;
 }
 
 export interface Image {

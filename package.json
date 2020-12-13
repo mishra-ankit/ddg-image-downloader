@@ -11,6 +11,7 @@
     "@oclif/command": "^1.8.0",
     "@oclif/config": "^1.17.0",
     "@oclif/plugin-help": "^3.2.0",
+    "@oclif/plugin-warn-if-update-available": "^1.7.0",
     "axios": "^0.21.0",
     "file-type": "^16.0.1",
     "fs-extra": "^9.0.1",
@@ -49,7 +50,14 @@
   "license": "MIT",
   "main": "lib/index.js",
   "oclif": {
-    "bin": "ddg-download"
+    "bin": "ddg-download",
+    "plugins": [
+      "@oclif/plugin-warn-if-update-available"
+    ],
+    "warn-if-update-available": {
+      "timeoutInDays": 1,
+      "message": "<%= config.name %> update available from <%= chalk.greenBright(config.version) %> to <%= chalk.greenBright(latest) %>."
+    }
   },
   "repository": "https://github.com/mishra-ankit/ddg-image-downloader",
   "scripts": {
