@@ -2,3 +2,4 @@ node_modules
 /.vscode
 src
 test
+package-lock.json
