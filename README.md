@@ -20,3 +20,16 @@ $ ddg-download "Morgan Freeman" -l 500 # Downloads first 500 images from Duck Du
 $ ddg-download "Morgan Freeman"
 $ ddg-download -q "Morgan Freeman" -l 60 -o myOutput
 ```
+
+OPTIONS
+```sh-session
+-c, --color=(color|Monochrome|Red|Orange)
+-h, --help                                  show CLI help
+-l, --layout=(Square|Tall|Wide)
+-l, --limit=limit                           [default: 10] no of images to download
+-o, --output=output                         output directory path
+-q, --query=query                           search query
+-s, --size=(Small|Medium|Large|Wallpaper)
+-t, --type=(photo|clipart|gif|transparent)
+-v, --version                               show CLI version
+```

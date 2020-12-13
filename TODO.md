@@ -1,6 +1,7 @@
 Future features -
 
-- [ ] Params, min width, min height
+- [x] Params
+- [ ] min width, min height
 - [ ] Custom File name format
 - [ ] Store log (for image source)
 - [ ] support filter script, can be used to filter out results which aren't desired e.g 
