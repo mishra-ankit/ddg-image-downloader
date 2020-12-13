@@ -66,7 +66,7 @@ async function downloadImages({
     const filteredImage = response.results.filter(filter)
     const toBeDownloadedImages = filteredImage.slice(0, Math.min(effectiveLimit, filteredImage.length))
 
-    cli.action.start(`Downloading ${toBeDownloadedImages.length} from`, 'page :' + page.toString(), {stdout: true})
+    cli.action.start(`Downloading ${toBeDownloadedImages.length} images from`, 'page :' + page.toString(), {stdout: true})
 
     // Method 1 : Doesn't uses parallel downloadImage capabilities, but ensures all files present.
     // for (let i = 0; i < filteredImage.length; i++) {

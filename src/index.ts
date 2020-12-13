@@ -1,6 +1,7 @@
 import {Command, flags} from '@oclif/command'
 import {downloadImages} from './downloader'
 import {Color, Layout, Size, Type} from './types'
+import {cli} from 'cli-ux'
 
 class DdgBulkImageDownloader extends Command {
   static description = 'Lazy way to download images from Duck Duck Go search results in bulk'
@@ -34,10 +35,13 @@ class DdgBulkImageDownloader extends Command {
     const {flags, args} = this.parse(DdgBulkImageDownloader)
 
     const {query, limit, output, ...restParams} = flags
-    const userQuery = args.query ?? query
+    let userQuery = args.query ?? query
     if (userQuery === undefined) {
-      this.error('No search term provided.')
-      return
+      userQuery = await cli.prompt('What do you want to search for ?')
+      if (userQuery === undefined) {
+        this.error('No search term provided.')
+        return
+      }
     }
     // show on stdout instead of stderr
 
