@@ -4,6 +4,7 @@ import {ImageResponse, Options} from './types'
 import * as path from 'path'
 import {ensureDirSync} from 'fs-extra'
 import cli from 'cli-ux'
+import {objToQueryString} from './utils'
 
 const ROOT_URL = 'https://duckduckgo.com'
 
@@ -31,10 +32,14 @@ async function downloadImages({
   cli.action.start('Initializing download', '', {stdout: true})
 
   const token = await getToken(query)
-  const tokenSuffix = `&vqd=${token}`
-  const url = `${ROOT_URL}/i.js?o=json&f=${fParams},type:photo&q=${encodeURIComponent(
-    query,
-  )}${tokenSuffix}`
+  const tokenQueryParamObj = {vqd: token}
+  const queryParamString = objToQueryString({
+    o: 'json',
+    f: fParams,
+    q: encodeURIComponent(query),
+    ...tokenQueryParamObj,
+  })
+  const url = `${ROOT_URL}/i.js?${queryParamString}`
 
   let response: ImageResponse | undefined
 
@@ -52,7 +57,7 @@ async function downloadImages({
       if (debug) {
         console.log('Going to page', page)
       }
-      nextUrl = `${ROOT_URL}/${response.next}${tokenSuffix}`
+      nextUrl = `${ROOT_URL}/${response.next}${objToQueryString(tokenQueryParamObj)}`
     }
     response = (await fetch(nextUrl).then(t => t.json())) as ImageResponse
 
