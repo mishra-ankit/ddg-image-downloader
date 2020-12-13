@@ -1,10 +1,9 @@
-Future feature -
+Future features -
 
-- Pagination
-- Params, min width, min height
-- output where to store ? Name format ? Also store log (for image source) ?
-
-- support filter script, can be used to filter out results which aren't desired
+- [ ] Params, min width, min height
+- [ ] Custom File name format
+- [ ] Store log (for image source)
+- [ ] support filter script, can be used to filter out results which aren't desired e.g 
   - No image from youtube
   - size min max, exact, aspect ratio
   - should have a face
