@@ -15,7 +15,7 @@ const downloadImage = async (url: string, path: string) => {
   if (!ext) {
     throw new Error(`Failed to identify image format : ${path}. Status ${response.status} returned - ${url}`)
   }
-  const pathWithExtension = `${path}.${ext}`
+  const pathWithExtension = `${path}.${ext === 'xml' ? 'svg' : ext}`
   fs.writeFile(pathWithExtension, buffer, () => {
     // console.log('finished downloading!', path))
   })

@@ -1,6 +1,7 @@
 import fetch, {Response} from 'node-fetch'
 import downloadImage from './download-image'
-import {Options, ImageResponse} from './types'
+import {ImageResponse, Options} from './types'
+import * as path from 'path'
 
 const ROOT_URL = 'https://duckduckgo.com'
 
@@ -35,7 +36,7 @@ async function downloadImages({
   let count = 0
   let page = 1
   const failed: string[] = []
-  while (count - failed.length < limit) {
+  while ((count - failed.length) < limit) {
     // console.log("Next:", response.next);
     let nextUrl: string = url
     if (response?.next) {
@@ -63,10 +64,11 @@ async function downloadImages({
     await Promise.all(
       filteredImage.map(async (item: any) => {
         try {
-          await downloadImage(item.image, `${outputPath + query}_${count++}`)
+          const savePath = path.join(outputPath, `${outputPath + query}_${count++}`)
+          await downloadImage(item.image, savePath)
           // console.log("Success", count)
         } catch (error) {
-          // console.error("FAILED", error)
+          console.error(error.message)
           failed.push(error)
         } finally {
           // eslint-disable-next-line no-unsafe-finally
@@ -75,9 +77,6 @@ async function downloadImages({
       }),
     )
   }
-
-  console.error(failed.toString())
-  console.log('Download finished!')
 }
 
 export {downloadImages}

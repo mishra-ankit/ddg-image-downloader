@@ -2,30 +2,47 @@ import {Command, flags} from '@oclif/command'
 import {downloadImages} from './downloader'
 
 class DdgBulkImageDownloader extends Command {
-  static description = 'describe the command here'
+  static description = 'Lazy way to download images from Duck Duck Go search results in bulk'
 
   static flags = {
-    // add --version flag to show CLI version
     version: flags.version({char: 'v'}),
     help: flags.help({char: 'h'}),
-    // flag with a value (-n, --name=VALUE)
-    name: flags.string({char: 'n', description: 'Duck Duck Go Bulk Downloader'}),
-    query: flags.string({char: 'q', description: 'search query', required: true}),
-    limit: flags.integer({char: 'l', description: 'limit', default: 10}),
+    query: flags.string({char: 'q', description: 'search query'}),
+    limit: flags.integer({char: 'l', description: 'no of images to download', default: 10}),
+    output: flags.string({char: 'o', description: 'output directory path'}),
   }
 
-  static args = [{name: 'file'}]
+  static args = [{name: 'query'}]
+
+  // custom usage string for help
+  // this overrides the default usage
+  static usage = '"Morgan Freeman" --limit 50'
+
+  // examples to add to help
+  // each can be multiline
+  static examples = [
+    '$ ddg-download "Morgan Freeman"',
+    '$ dg-download -q "Morgan Freeman" -l 60 -o myOutput',
+  ]
 
   async run() {
-    const {flags} = this.parse(DdgBulkImageDownloader)
+    const {flags, args} = this.parse(DdgBulkImageDownloader)
 
-    const {query, limit} = flags
-    this.log(`Searching for - ${query}`)
+    const {query, limit, output} = flags
+    const userQuery = args.query ?? query
+    if (userQuery === undefined) {
+      this.error('No search term provided.')
+      return
+    }
+    this.log(`Searching for - ${userQuery}`)
     await downloadImages({
       limit,
-      query,
+      query: userQuery,
+      outputPath: output,
     })
+    this.log(`Download finished! ${limit} images saved ${output ? `to folder '${output}'` : ''}`)
   }
+
 }
 
 export = DdgBulkImageDownloader
