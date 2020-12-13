@@ -19,7 +19,7 @@ $ npm install -g ddg-bulk-image-downloader
 $ ddg-download COMMAND
 running command...
 $ ddg-download (-v|--version|version)
-ddg-bulk-image-downloader/0.0.0 win32-x64 node-v12.16.3
+ddg-bulk-image-downloader/0.0.1-0 win32-x64 node-v12.16.3
 $ ddg-download --help [COMMAND]
 USAGE
   $ ddg-download COMMAND
