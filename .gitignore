@@ -9,3 +9,4 @@ node_modules
 /*.jpg
 /.idea
 package-lock.json
+/*.tgz
