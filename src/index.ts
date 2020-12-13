@@ -40,6 +40,7 @@ class DdgBulkImageDownloader extends Command {
       query: userQuery,
       outputPath: output,
     })
+    // console.log(this.config)
     this.log(`Download finished! ${limit} images saved ${output ? `to folder '${output}'` : ''}`)
   }
 

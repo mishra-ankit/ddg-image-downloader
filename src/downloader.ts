@@ -2,6 +2,7 @@ import fetch, {Response} from 'node-fetch'
 import downloadImage from './download-image'
 import {ImageResponse, Options} from './types'
 import * as path from 'path'
+import {ensureDirSync} from 'fs-extra'
 
 const ROOT_URL = 'https://duckduckgo.com'
 
@@ -32,6 +33,9 @@ async function downloadImages({
   )}${tokenSuffix}`
 
   let response: ImageResponse | undefined
+
+  // Ensure output folder is created
+  ensureDirSync(outputPath)
 
   let count = 0
   let page = 1
@@ -65,6 +69,7 @@ async function downloadImages({
       filteredImage.map(async (item: any) => {
         try {
           const savePath = path.join(outputPath, `${outputPath + query}_${count++}`)
+          // console.log(savePath)
           await downloadImage(item.image, savePath)
           // console.log("Success", count)
         } catch (error) {
