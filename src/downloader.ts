@@ -68,7 +68,7 @@ async function downloadImages({
     await Promise.all(
       filteredImage.map(async (item: any) => {
         try {
-          const savePath = path.join(outputPath, `${outputPath + query}_${count++}`)
+          const savePath = path.join(outputPath, `${query}_${count++}`)
           // console.log(savePath)
           await downloadImage(item.image, savePath)
           // console.log("Success", count)
