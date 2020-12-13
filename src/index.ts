@@ -1,5 +1,6 @@
 import {Command, flags} from '@oclif/command'
 import {downloadImages} from './downloader'
+import {Color, Layout, Size, Type} from './types'
 
 class DdgBulkImageDownloader extends Command {
   static description = 'Lazy way to download images from Duck Duck Go search results in bulk'
@@ -10,6 +11,10 @@ class DdgBulkImageDownloader extends Command {
     query: flags.string({char: 'q', description: 'search query'}),
     limit: flags.integer({char: 'l', description: 'no of images to download', default: 10}),
     output: flags.string({char: 'o', description: 'output directory path'}),
+    size: flags.enum({char: 's', options: Size}),
+    type: flags.enum({char: 't', options: Type}),
+    layout: flags.enum({char: 'l', options: Layout}),
+    color: flags.enum({char: 'c', options: Color.slice(0, 4)}),
   }
 
   static args = [{name: 'query'}]
@@ -28,7 +33,7 @@ class DdgBulkImageDownloader extends Command {
   async run() {
     const {flags, args} = this.parse(DdgBulkImageDownloader)
 
-    const {query, limit, output} = flags
+    const {query, limit, output, ...restParams} = flags
     const userQuery = args.query ?? query
     if (userQuery === undefined) {
       this.error('No search term provided.')
@@ -40,6 +45,7 @@ class DdgBulkImageDownloader extends Command {
       limit,
       query: userQuery,
       outputPath: output,
+      imageOptions: restParams,
       debug: Boolean(this.config.debug),
     })
     // console.log(this.config)

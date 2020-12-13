@@ -5,6 +5,7 @@ import * as path from 'path'
 import {ensureDirSync} from 'fs-extra'
 import cli from 'cli-ux'
 import {objToQueryString} from './utils'
+import {filterOptionsToParam} from './filterOptionsToParam'
 
 const ROOT_URL = 'https://duckduckgo.com'
 
@@ -25,7 +26,7 @@ async function downloadImages({
   query,
   limit,
   filter = () => true,
-  fParams = 'size:small',
+  imageOptions,
   outputPath = '',
   debug,
 }: Options) {
@@ -35,7 +36,7 @@ async function downloadImages({
   const tokenQueryParamObj = {vqd: token}
   const queryParamString = objToQueryString({
     o: 'json',
-    f: fParams,
+    f: filterOptionsToParam(imageOptions),
     q: encodeURIComponent(query),
     ...tokenQueryParamObj,
   })

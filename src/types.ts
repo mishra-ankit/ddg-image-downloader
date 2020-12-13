@@ -2,7 +2,7 @@ export interface Options {
   query: string;
   limit: number;
   filter?: (image: Image) => boolean;
-  fParams?: string;
+  imageOptions?: object;
   outputPath?: string;
   debug: boolean;
 }
@@ -16,23 +16,47 @@ export interface ImageResponse {
   next: string;
 }
 
-export interface ImageFilterOption {
-  size?: 'Small' | 'Medium' | 'Large' | 'Wallpaper';
-  type?: 'photo' | 'clipart' | 'gif' | 'transparent';
-  layout?: 'Square' | 'Tall' | 'Wide';
-  color?:
-    'color' |
-    'Monochrome' |
-    'Red' |
-    'Orange' |
-    'Yellow' |
-    'Green' |
-    'Blue' |
-    'Purple' |
-    'Pink' |
-    'Brown' |
-    'Black' |
-    'Gray' |
-    'Teal' |
-    'White';
-}
+export const Size = ['Small', 'Medium', 'Large', 'Wallpaper']
+export const Type = ['photo', 'clipart', 'gif', 'transparent']
+export const Layout = ['Square', 'Tall', 'Wide']
+export const Color =
+  ['color',
+    'Monochrome',
+    'Red',
+    'Orange',
+    'Yellow',
+    'Green',
+    'Blue',
+    'Purple',
+    'Pink',
+    'Brown',
+    'Black',
+    'Gray',
+    'Teal',
+    'White']
+
+// export type Size = 'Small' | 'Medium' | 'Large' | 'Wallpaper';
+// export type Type = 'photo' | 'clipart' | 'gif' | 'transparent';
+// export type Layout = 'Square' | 'Tall' | 'Wide';
+// export type Color =
+//   'color' |
+//   'Monochrome' |
+//   'Red' |
+//   'Orange' |
+//   'Yellow' |
+//   'Green' |
+//   'Blue' |
+//   'Purple' |
+//   'Pink' |
+//   'Brown' |
+//   'Black' |
+//   'Gray' |
+//   'Teal' |
+//   'White'
+
+// export interface ImageFilterOption {
+//   size?: Size;
+//   type?: Type;
+//   layout?: Layout;
+//   color?: Color;
+// }
