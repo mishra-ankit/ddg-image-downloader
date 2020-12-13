@@ -35,7 +35,7 @@ async function downloadImages({
   let count = 0
   let page = 1
   const failed: string[] = []
-  while (count < limit) {
+  while (count - failed.length < limit) {
     // console.log("Next:", response.next);
     let nextUrl: string = url
     if (response?.next) {
@@ -44,9 +44,7 @@ async function downloadImages({
     }
     response = (await fetch(nextUrl).then(t => t.json())) as ImageResponse
 
-    // console.log('Total count:', response.results.length)
-
-    const effectiveLimit = limit - count
+    const effectiveLimit = limit - (count - failed.length)
 
     const filteredImage = response.results.filter(filter).slice(0, effectiveLimit)
 
@@ -77,7 +75,8 @@ async function downloadImages({
       }),
     )
   }
-  // console.error(failed.toString())
+
+  console.error(failed.toString())
   console.log('Download finished!')
 }
 
