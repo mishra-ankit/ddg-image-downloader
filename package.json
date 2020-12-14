@@ -45,6 +45,11 @@
   ],
   "homepage": "https://github.com/mishra-ankit/ddg-image-downloader",
   "keywords": [
+    "duckduckgo",
+    "scraper",
+    "images",
+    "download",
+    "image-downloader",
     "oclif"
   ],
   "license": "MIT",
