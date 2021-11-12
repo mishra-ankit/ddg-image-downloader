@@ -8,6 +8,5 @@
 node_modules
 /*.jpg
 /.idea
-package-lock.json
 /*.tgz
 .nyc_output
