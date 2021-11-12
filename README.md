@@ -14,11 +14,15 @@ $ npm install -g ddg-bulk-image-downloader
 $ ddg-download "Morgan Freeman" -l 500 # Downloads first 500 images from Duck Duck go to current folder
 ```
 
+Or try without installing 
+```sh-session
+$ npx ddg-bulk-image-downloader -q "Morgan Freeman" -l 60 -o out
+
 # Examples
 
 ```sh-session
 $ ddg-download "Morgan Freeman"
-$ ddg-download -q "Morgan Freeman" -l 60 -o myOutput
+$ ddg-download -q "Morgan Freeman" -l 60 -o out
 ```
 
 OPTIONS

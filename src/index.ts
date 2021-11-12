@@ -33,7 +33,7 @@ class DdgBulkImageDownloader extends Command {
   // each can be multiline
   static examples = [
     '$ ddg-download "Morgan Freeman"',
-    '$ ddg-download -q "Morgan Freeman" -l 60 -o myOutput',
+    '$ ddg-download -q "Morgan Freeman" -l 60 -o out',
   ];
 
   async run() {
