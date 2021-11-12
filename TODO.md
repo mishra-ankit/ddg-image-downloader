@@ -4,7 +4,7 @@ Future features -
 - [ ] min width, min height
 - [ ] Custom File name format
 - [ ] Store log (for image source)
-- [ ] support filter script, can be used to filter out results which aren't desired e.g 
+- [ ] support filter script, can be used to filter out results which aren't desired e.g
   - No image from youtube
   - size min max, exact, aspect ratio
   - should have a face

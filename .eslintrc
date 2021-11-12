@@ -1,8 +1,5 @@
 {
-  "extends": [
-    "oclif",
-    "oclif-typescript"
-  ],
+  "extends": ["oclif", "oclif-typescript", "prettier"],
   "rules": {
     "no-console": "off",
     "no-await-in-loop": "warn",

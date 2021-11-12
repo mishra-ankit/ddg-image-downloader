@@ -16,24 +16,25 @@ export interface ImageResponse {
   next: string;
 }
 
-export const Size = ['Small', 'Medium', 'Large', 'Wallpaper']
-export const Type = ['photo', 'clipart', 'gif', 'transparent']
-export const Layout = ['Square', 'Tall', 'Wide']
-export const Color =
-  ['color',
-    'Monochrome',
-    'Red',
-    'Orange',
-    'Yellow',
-    'Green',
-    'Blue',
-    'Purple',
-    'Pink',
-    'Brown',
-    'Black',
-    'Gray',
-    'Teal',
-    'White']
+export const Size = ["Small", "Medium", "Large", "Wallpaper"];
+export const Type = ["photo", "clipart", "gif", "transparent"];
+export const Layout = ["Square", "Tall", "Wide"];
+export const Color = [
+  "color",
+  "Monochrome",
+  "Red",
+  "Orange",
+  "Yellow",
+  "Green",
+  "Blue",
+  "Purple",
+  "Pink",
+  "Brown",
+  "Black",
+  "Gray",
+  "Teal",
+  "White",
+];
 
 // export type Size = 'Small' | 'Medium' | 'Large' | 'Wallpaper';
 // export type Type = 'photo' | 'clipart' | 'gif' | 'transparent';

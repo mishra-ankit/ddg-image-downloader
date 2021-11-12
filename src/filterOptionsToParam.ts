@@ -1,15 +1,15 @@
 // import {ImageFilterOption} from './types'
 
 const filterOptionsToParam = (options?: object): string => {
-  const result: string[] = []
-  if (!options) return ''
-  const validOptions = ['size', 'type', 'layout', 'color']
+  const result: string[] = [];
+  if (!options) return "";
+  const validOptions = ["size", "type", "layout", "color"];
   for (const [key, value] of Object.entries(options)) {
     if (value && validOptions.includes(key)) {
-      result.push(`${key}:${value}`)
+      result.push(`${key}:${value}`);
     }
   }
-  return result.join(',')
-}
+  return result.join(",");
+};
 
-export {filterOptionsToParam}
+export { filterOptionsToParam };

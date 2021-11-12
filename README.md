@@ -1,5 +1,4 @@
-ddg-bulk-image-downloader
-=========================
+# ddg-bulk-image-downloader
 
 Lazy way to download images from Duck Duck Go search results in bulk
 
@@ -12,16 +11,18 @@ Lazy way to download images from Duck Duck Go search results in bulk
 
 ```sh-session
 $ npm install -g ddg-bulk-image-downloader
-$ ddg-download "Morgan Freeman" -l 500 # Downloads first 500 images from Duck Duck go to current folder 
+$ ddg-download "Morgan Freeman" -l 500 # Downloads first 500 images from Duck Duck go to current folder
 ```
 
 # Examples
+
 ```sh-session
 $ ddg-download "Morgan Freeman"
 $ ddg-download -q "Morgan Freeman" -l 60 -o myOutput
 ```
 
 OPTIONS
+
 ```sh-session
 -c, --color=(color|Monochrome|Red|Orange)
 -h, --help                                  show CLI help
