@@ -1,7 +1,7 @@
 {
   "name": "ddg-bulk-image-downloader",
   "description": "Lazy way to download images from Duck Duck Go search results in bulk",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "author": "Ankit Mishra",
   "bin": {
     "ddg-download": "./bin/run"
