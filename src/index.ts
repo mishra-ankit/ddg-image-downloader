@@ -5,7 +5,7 @@ import { cli } from "cli-ux";
 
 class DdgBulkImageDownloader extends Command {
   static description =
-    "Lazy way to download images from Duck Duck Go search results in bulk";
+    "Lazy way to download images from Duck Duck Go search results in bulk. Also supports filters like size, type, layout, color.";
 
   static flags = {
     version: flags.version({ char: "v" }),

@@ -17,6 +17,7 @@ $ ddg-download "Morgan Freeman" -l 500 # Downloads first 500 images from Duck Du
 Or try without installing 
 ```sh-session
 $ npx ddg-bulk-image-downloader -q "Morgan Freeman" -l 60 -o out
+```
 
 # Examples
 
