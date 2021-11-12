@@ -1,11 +1,12 @@
-import fetch, {Response} from 'node-fetch'
+import fetch, { Response } from 'node-fetch'
 import downloadImage from './download-image'
-import {ImageResponse, Options} from './types'
 import * as path from 'path'
-import {ensureDirSync} from 'fs-extra'
+import { ensureDirSync } from 'fs-extra'
 import cli from 'cli-ux'
-import {objToQueryString} from './utils'
-import {filterOptionsToParam} from './filterOptionsToParam'
+
+import { ImageResponse, Options } from './types'
+import { objToQueryString } from './utils'
+import { filterOptionsToParam } from './filterOptionsToParam'
 
 const ROOT_URL = 'https://duckduckgo.com'
 
@@ -30,12 +31,13 @@ async function downloadImages({
   outputPath = '',
   debug,
 }: Options) {
-  cli.action.start('Initializing download', '', {stdout: true})
+  cli.action.start('Initializing download', '', { stdout: true })
 
   const token = await getToken(query)
-  const tokenQueryParamObj = {vqd: token}
+  const tokenQueryParamObj = { vqd: token };
   const queryParamString = objToQueryString({
     o: 'json',
+    l: 'wt-wt',
     f: filterOptionsToParam(imageOptions),
     q: encodeURIComponent(query),
     ...tokenQueryParamObj,
@@ -58,15 +60,21 @@ async function downloadImages({
       if (debug) {
         console.log('Going to page', page)
       }
-      nextUrl = `${ROOT_URL}/${response.next}${objToQueryString(tokenQueryParamObj)}`
+      nextUrl = `${ROOT_URL}/${response.next}&${objToQueryString(tokenQueryParamObj)}`
     }
-    response = (await fetch(nextUrl).then(t => t.json())) as ImageResponse
-
+    console.log('Fetching', nextUrl);
+    response = (await fetch(nextUrl).then(t => {
+      console.log('Status', t.status);
+      return t.json()
+    }).catch(e => {
+      console.error(e);
+      return undefined;
+    })) as ImageResponse
     const effectiveLimit = limit - (count - failed.length)
     const filteredImage = response.results.filter(filter)
     const toBeDownloadedImages = filteredImage.slice(0, Math.min(effectiveLimit, filteredImage.length))
 
-    cli.action.start(`Downloading ${toBeDownloadedImages.length} images from`, 'page :' + page.toString(), {stdout: true})
+    cli.action.start(`Downloading ${toBeDownloadedImages.length} images from`, 'page :' + page.toString(), { stdout: true })
 
     // Method 1 : Doesn't uses parallel downloadImage capabilities, but ensures all files present.
     // for (let i = 0; i < filteredImage.length; i++) {
@@ -103,4 +111,4 @@ async function downloadImages({
   cli.action.stop('done')
 }
 
-export {downloadImages}
+export { downloadImages }
